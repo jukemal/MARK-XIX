@@ -1,5 +1,6 @@
 package com.example.mark_xix.models;
 
+import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.ServerTimestamp;
 
 import java.io.Serializable;
@@ -10,7 +11,7 @@ import lombok.Builder;
 @Builder
 public class User implements Serializable {
 
-    private String id;
+    private @DocumentId String id;
     private String email;
     private String name;
     private String telephoneNumber;
