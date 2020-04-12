@@ -11,6 +11,7 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.example.mark_xix.R;
 import com.example.mark_xix.SplashScreen;
@@ -42,7 +43,7 @@ public class ProfileFragment extends Fragment {
 
     private final CollectionReference collectionReferenceMedicine=db.collection("medicines");
 
-    public View onCreateView(@NonNull LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
 
         Button buttonLogout=root.findViewById(R.id.btnLogOut);
@@ -70,6 +71,15 @@ public class ProfileFragment extends Fragment {
                 });
 
                 builder.show();
+            }
+        });
+
+        Button buttonSettings=root.findViewById(R.id.btnSettings);
+
+        buttonSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(container).navigate(R.id.navigation_settings);
             }
         });
 

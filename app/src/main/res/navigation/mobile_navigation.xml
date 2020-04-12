@@ -22,4 +22,9 @@
         android:name="com.example.mark_xix.ui.profile.ProfileFragment"
         android:label="@string/title_profile"
         tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.example.mark_xix.ui.SettingsFragment"
+        android:label="Settings" />
 </navigation>
