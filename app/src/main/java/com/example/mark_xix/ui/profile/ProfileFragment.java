@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -15,8 +16,11 @@ import androidx.navigation.Navigation;
 
 import com.example.mark_xix.R;
 import com.example.mark_xix.SplashScreen;
+import com.example.mark_xix.api.ApiService;
+import com.example.mark_xix.api.ApiServiceGenerator;
 import com.example.mark_xix.models.EnumSlot;
 import com.example.mark_xix.models.Medicine;
+import com.example.mark_xix.utils._ResponseBody;
 import com.github.javafaker.Faker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -29,10 +33,15 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class ProfileFragment extends Fragment {
@@ -43,7 +52,7 @@ public class ProfileFragment extends Fragment {
 
     private final CollectionReference collectionReferenceMedicine=db.collection("medicines");
 
-    public View onCreateView(@NonNull LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
 
         Button buttonLogout=root.findViewById(R.id.btnLogOut);
@@ -163,6 +172,51 @@ public class ProfileFragment extends Fragment {
                                 }
                             }
                         });
+            }
+        });
+
+        Button buttonPost=root.findViewById(R.id.btnPost);
+
+        buttonPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Medicine> medicineList=new ArrayList<>();
+
+                int i=0;
+
+                for (EnumSlot slot:EnumSlot.values()){
+                    if (i==1)break;
+
+                    Medicine medicine=Medicine.builder()
+                            .name(faker.lorem().word())
+                            .price(random.nextInt(900+1)+100)
+                            .description(faker.lorem().paragraph(1))
+                            .slot(slot)
+                            .image_link(picture_list.get(random.nextInt(5)))
+                            .build();
+
+                    medicineList.add(medicine);
+
+                    i++;
+                }
+
+                ApiService service= ApiServiceGenerator.createService(ApiService.class);
+
+                Call<_ResponseBody> call=service.sendMedicineList(medicineList);
+
+                call.enqueue(new Callback<_ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<_ResponseBody> call, Response<_ResponseBody> response) {
+                        Toast.makeText(getContext(),"Successful.",Toast.LENGTH_SHORT).show();
+                        Log.e("response",response.toString());
+                    }
+
+                    @Override
+                    public void onFailure(Call<_ResponseBody> call, Throwable t) {
+                        Toast.makeText(getContext(),"Error Connecting to Server.",Toast.LENGTH_SHORT).show();
+                        Log.e("responseerr",t.toString());
+                    }
+                });
             }
         });
 

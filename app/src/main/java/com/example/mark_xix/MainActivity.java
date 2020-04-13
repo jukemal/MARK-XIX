@@ -1,7 +1,12 @@
 package com.example.mark_xix;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 
+import com.example.mark_xix.api.ApiServiceGenerator;
+import com.example.mark_xix.utils.GlobalAppContextSingleton;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +15,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,6 +26,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        String ip_address=sharedPreferences.getString("ip_address","");
+        Log.e("ip_address",ip_address);
+
+        ApiServiceGenerator.setApiBaseUrl(ip_address);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -40,5 +54,4 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController,appBarConfiguration)
                 || super.onSupportNavigateUp();
     }
-
 }

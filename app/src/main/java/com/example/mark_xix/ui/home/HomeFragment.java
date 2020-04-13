@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -20,8 +21,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.mark_xix.R;
+import com.example.mark_xix.api.ApiService;
+import com.example.mark_xix.api.ApiServiceGenerator;
 import com.example.mark_xix.models.Medicine;
 import com.example.mark_xix.models.MedicineSelecter;
+import com.example.mark_xix.utils._ResponseBody;
 import com.example.mark_xix.viewadapters.HomeRecyclerViewAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -37,6 +41,10 @@ import org.apache.commons.collections4.Transformer;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
@@ -103,7 +111,6 @@ public class HomeFragment extends Fragment {
                     List<MedicineSelecter> selectedList=homeRecyclerViewAdapter.getSelectedItemList();
 
                     List<Medicine> selectedMedicineList= (List<Medicine>) CollectionUtils.collect(selectedList, new Transformer<MedicineSelecter, Medicine>() {
-
                         @Override
                         public Medicine transform(MedicineSelecter input) {
                             return input.getMedicine();
@@ -144,8 +151,26 @@ public class HomeFragment extends Fragment {
                     buttonConfirm.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            showProgressDialog();
-                            alertDialog.dismiss();
+                            ApiService service= ApiServiceGenerator.createService(ApiService.class);
+
+                            Call<_ResponseBody> call=service.sendMedicineList(selectedMedicineList);
+
+                            call.enqueue(new Callback<_ResponseBody>() {
+                                @Override
+                                public void onResponse(Call<_ResponseBody> call, Response<_ResponseBody> response) {
+                                    Toast.makeText(getContext(),"Successful.",Toast.LENGTH_SHORT).show();
+                                    Log.e("response",response.toString());
+                                    showProgressDialog();
+                                    alertDialog.dismiss();
+                                }
+
+                                @Override
+                                public void onFailure(Call<_ResponseBody> call, Throwable t) {
+                                    Toast.makeText(getContext(),"Error Connecting to Server.",Toast.LENGTH_SHORT).show();
+                                    Log.e("err",t.toString());
+                                    alertDialog.dismiss();
+                                }
+                            });
                         }
                     });
 
@@ -174,7 +199,7 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
-    public void showProgressDialog(){
+    private void showProgressDialog(){
         View viewPopup=LayoutInflater.from(getContext()).inflate(R.layout.layout_progress_popup,null);
 
         MaterialAlertDialogBuilder materialAlertDialogBuilder=new MaterialAlertDialogBuilder(getContext());

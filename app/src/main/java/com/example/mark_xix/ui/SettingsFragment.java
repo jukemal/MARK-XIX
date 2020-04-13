@@ -2,7 +2,9 @@ package com.example.mark_xix.ui;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -10,8 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 import androidx.preference.PreferenceScreen;
 import androidx.preference.SwitchPreferenceCompat;
+
+import com.example.mark_xix.api.ApiServiceGenerator;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 
@@ -34,6 +39,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     Toast.makeText(getContext(),"Should be a valid IP address.",Toast.LENGTH_SHORT).show();
                     return false;
                 }else {
+                    ApiServiceGenerator.setApiBaseUrl(newValue.toString());
                     return true;
                 }
             }
