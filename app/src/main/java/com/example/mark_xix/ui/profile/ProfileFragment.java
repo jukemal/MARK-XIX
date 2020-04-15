@@ -36,6 +36,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
@@ -175,50 +176,6 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        Button buttonPost=root.findViewById(R.id.btnPost);
-
-        buttonPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                List<Medicine> medicineList=new ArrayList<>();
-
-                int i=0;
-
-                for (EnumSlot slot:EnumSlot.values()){
-                    if (i==1)break;
-
-                    Medicine medicine=Medicine.builder()
-                            .name(faker.lorem().word())
-                            .price(random.nextInt(900+1)+100)
-                            .description(faker.lorem().paragraph(1))
-                            .slot(slot)
-                            .image_link(picture_list.get(random.nextInt(5)))
-                            .build();
-
-                    medicineList.add(medicine);
-
-                    i++;
-                }
-
-                ApiService service= ApiServiceGenerator.createService(ApiService.class);
-
-                Call<_ResponseBody> call=service.sendMedicineList(medicineList);
-
-                call.enqueue(new Callback<_ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<_ResponseBody> call, Response<_ResponseBody> response) {
-                        Toast.makeText(getContext(),"Successful.",Toast.LENGTH_SHORT).show();
-                        Log.e("response",response.toString());
-                    }
-
-                    @Override
-                    public void onFailure(Call<_ResponseBody> call, Throwable t) {
-                        Toast.makeText(getContext(),"Error Connecting to Server.",Toast.LENGTH_SHORT).show();
-                        Log.e("responseerr",t.toString());
-                    }
-                });
-            }
-        });
 
         return root;
     }

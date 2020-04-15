@@ -29,6 +29,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         editTextPreference.setKey("ip_address");
         editTextPreference.setTitle("IP Address");
         editTextPreference.setSummary("IP Address for Robot.");
+        editTextPreference.setDefaultValue("192.168.1.10");
 
         editTextPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override

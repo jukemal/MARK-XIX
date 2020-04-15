@@ -16,8 +16,6 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        GlobalAppContextSingleton.getInstance().initialize(getApplicationContext());
-
         final FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
 
         if (firebaseUser!=null){

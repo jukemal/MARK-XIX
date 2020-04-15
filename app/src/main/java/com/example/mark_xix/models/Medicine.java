@@ -2,6 +2,7 @@ package com.example.mark_xix.models;
 
 import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.ServerTimestamp;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -10,12 +11,22 @@ import lombok.Builder;
 
 @Builder
 public class Medicine implements Serializable {
-
+    @SerializedName("id")
     private @DocumentId String id;
+
+    @SerializedName("name")
     private String name;
+
+    @SerializedName("price")
     private int price;
+
+    @SerializedName("description")
     private String description;
+
+    @SerializedName("slot")
     private EnumSlot slot;
+
+    @SerializedName("image_link")
     private String image_link;
     private @ServerTimestamp Date timestamp;
 

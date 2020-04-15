@@ -32,7 +32,11 @@ public class MainActivity extends AppCompatActivity {
         String ip_address=sharedPreferences.getString("ip_address","");
         Log.e("ip_address",ip_address);
 
-        ApiServiceGenerator.setApiBaseUrl(ip_address);
+        if (ip_address.isEmpty()){
+            ApiServiceGenerator.setApiBaseUrl("192.168.1.10");
+        }else {
+            ApiServiceGenerator.setApiBaseUrl(ip_address);
+        }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
