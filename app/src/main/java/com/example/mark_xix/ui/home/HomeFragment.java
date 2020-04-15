@@ -26,12 +26,16 @@ import com.example.mark_xix.api.ApiServiceGenerator;
 import com.example.mark_xix.models.EnumSlot;
 import com.example.mark_xix.models.Medicine;
 import com.example.mark_xix.models.MedicineSelecter;
+import com.example.mark_xix.models.OrderHistory;
 import com.example.mark_xix.viewadapters.HomeRecyclerViewAdapter;
 import com.github.javafaker.Faker;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -68,6 +72,8 @@ public class HomeFragment extends Fragment {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private final CollectionReference collectionReferenceMedicine = db.collection("medicines");
+
+    private final CollectionReference collectionReferenceOrderHistory = db.collection("order_history");
 
     private HomeRecyclerViewAdapter homeRecyclerViewAdapter;
 
@@ -190,7 +196,31 @@ public class HomeFragment extends Fragment {
 
                                     if (response.isSuccessful()) {
 
-                                        
+                                        int total=0;
+
+                                        for (Medicine medicine:selectedMedicineList){
+                                            total+=medicine.getPrice();
+                                        }
+
+                                        OrderHistory orderHistory=OrderHistory.builder()
+                                                .medicineList(selectedMedicineList)
+                                                .total(total)
+                                                .build();
+
+                                        collectionReferenceOrderHistory
+                                                .add(orderHistory)
+                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                    @Override
+                                                    public void onSuccess(DocumentReference documentReference) {
+                                                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Log.w(TAG, "Error adding document", e);
+                                                    }
+                                                });
 
                                         disposable = Observable.interval(2, TimeUnit.SECONDS)
                                                 .take(20)
