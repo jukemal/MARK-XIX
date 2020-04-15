@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,7 @@ import com.example.mark_xix.api.ApiService;
 import com.example.mark_xix.api.ApiServiceGenerator;
 import com.example.mark_xix.models.EnumSlot;
 import com.example.mark_xix.models.Medicine;
+import com.example.mark_xix.models.User;
 import com.example.mark_xix.utils._ResponseBody;
 import com.github.javafaker.Faker;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,6 +32,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -48,13 +51,61 @@ import retrofit2.Response;
 public class ProfileFragment extends Fragment {
 
     private static final String TAG = "Profile";
-    private final FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
-    private final FirebaseFirestore db=FirebaseFirestore.getInstance();
 
-    private final CollectionReference collectionReferenceMedicine=db.collection("medicines");
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    private final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
+    private final DocumentReference documentReferenceUser=db.collection("users")
+            .document(firebaseAuth.getCurrentUser().getUid());
 
     public View onCreateView(@NonNull LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        TextView name=root.findViewById(R.id.name_profile);
+        TextView email=root.findViewById(R.id.email_profile);
+
+        documentReferenceUser.get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Log.e("User", "DocumentSnapshot data: " + document.getData());
+
+                                User user=document.toObject(User.class);
+
+                                name.setText(user.getName());
+                                email.setText(user.getEmail());
+
+                            } else {
+                                Log.e("User", "No such document");
+                            }
+                        } else {
+                            Log.e("User", "get failed with ", task.getException());
+                            Toast.makeText(getContext(),"No Internet Connection. Try Again",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+        Button btnEditMedicine=root.findViewById(R.id.btnEditMedicine);
+
+        btnEditMedicine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        Button buttonSettings=root.findViewById(R.id.btnSettings);
+
+        buttonSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(container).navigate(R.id.navigation_settings);
+            }
+        });
 
         Button buttonLogout=root.findViewById(R.id.btnLogOut);
 
@@ -83,99 +134,6 @@ public class ProfileFragment extends Fragment {
                 builder.show();
             }
         });
-
-        Button buttonSettings=root.findViewById(R.id.btnSettings);
-
-        buttonSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(container).navigate(R.id.navigation_settings);
-            }
-        });
-
-        Button buttonAdd=root.findViewById(R.id.btnAdd);
-
-        final Faker faker=new Faker();
-        final Random random=new Random();
-
-        final List<String> picture_list=new ArrayList<>();
-        picture_list.add("gs://mark-xix.appspot.com/medicine_1.jpg");
-        picture_list.add("gs://mark-xix.appspot.com/medicine_2.jpg");
-        picture_list.add("gs://mark-xix.appspot.com/medicine_3.jpg");
-        picture_list.add("gs://mark-xix.appspot.com/medicine_4.jpg");
-        picture_list.add("gs://mark-xix.appspot.com/medicine_5.jpg");
-
-        buttonAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                for (EnumSlot slot:EnumSlot.values()){
-                    Medicine medicine=Medicine.builder()
-                            .name(faker.lorem().word())
-                            .price(random.nextInt(900+1)+100)
-                            .description(faker.lorem().paragraph(6))
-                            .slot(slot)
-                            .image_link(picture_list.get(random.nextInt(5)))
-                            .build();
-
-                    Log.e("Medicine",medicine.toString());
-
-                    collectionReferenceMedicine
-                            .add(medicine)
-                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                @Override
-                                public void onSuccess(DocumentReference documentReference) {
-                                    Log.e(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.e(TAG, "Error adding document", e);
-                                }
-                            });
-
-                }
-            }
-        });
-
-        Button buttonDelete=root.findViewById(R.id.btnDelete);
-
-        buttonDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                collectionReferenceMedicine
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                        Log.d(TAG, document.getId() + " => " + document.getData());
-
-                                        collectionReferenceMedicine
-                                                .document(document.getId())
-                                                .delete()
-                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                    @Override
-                                                    public void onSuccess(Void aVoid) {
-                                                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                                                    }
-                                                })
-                                                .addOnFailureListener(new OnFailureListener() {
-                                                    @Override
-                                                    public void onFailure(@NonNull Exception e) {
-                                                        Log.w(TAG, "Error deleting document", e);
-                                                    }
-                                                });
-                                    }
-                                } else {
-                                    Log.d(TAG, "Error getting documents: ", task.getException());
-                                }
-                            }
-                        });
-            }
-        });
-
 
         return root;
     }
