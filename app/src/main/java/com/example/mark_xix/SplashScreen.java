@@ -5,11 +5,10 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.mark_xix.utils.GlobalAppContextSingleton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
 
+//Splash
 public class SplashScreen extends AppCompatActivity {
 
     @Override
@@ -18,6 +17,8 @@ public class SplashScreen extends AppCompatActivity {
 
         final FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
 
+        //If user is already logged in open MainActivity
+        //Else LoginActivity.
         if (firebaseUser!=null){
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);

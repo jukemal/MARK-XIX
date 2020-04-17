@@ -32,6 +32,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Add / Edit Medicine
+ */
 public class AddMedicineFragment extends Fragment {
 
     private static final String TAG = "Add_Medicine";
@@ -63,6 +66,9 @@ public class AddMedicineFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
+        /*
+         * Fetching medicine list from firebase and showing it in a recyclerview.
+         */
         collectionReferenceMedicine
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -94,9 +100,12 @@ public class AddMedicineFragment extends Fragment {
                                 if (addMedicineRecyclerViewAdapter.getItemCount()<18){
                                     buttonAdd.setEnabled(true);
 
+                                    //Add button
                                     buttonAdd.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
+                                            //Calling "AddMedicineEdit" Fragment
+
                                             Bundle bundle = new Bundle();
                                             bundle.putString("id", "");
                                             bundle.putSerializable("medicineList", (Serializable) medicineList);
@@ -114,6 +123,7 @@ public class AddMedicineFragment extends Fragment {
         return root;
     }
 
+    //On Resume re fetching the list
     @Override
     public void onResume() {
         super.onResume();
@@ -122,7 +132,6 @@ public class AddMedicineFragment extends Fragment {
         recyclerView.setAdapter(null);
 
         collectionReferenceMedicine
-                .orderBy("slot")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

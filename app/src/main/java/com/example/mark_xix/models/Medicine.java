@@ -9,6 +9,9 @@ import java.util.Date;
 
 import lombok.Builder;
 
+/**
+ * Data class for Medicine.
+ */
 @Builder
 public class Medicine implements Serializable {
     @SerializedName("id")

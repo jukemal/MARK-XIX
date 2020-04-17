@@ -1,14 +1,12 @@
 package com.example.mark_xix;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mark_xix.models.User;
@@ -24,6 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+//Register
 public class RegisterActivity extends AppCompatActivity {
 
     private final FirebaseFirestore db= FirebaseFirestore.getInstance();

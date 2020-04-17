@@ -28,6 +28,7 @@ import java.util.List;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
+//Home recyclerview adapter.
 public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerViewAdapter.HomeRecyclerViewHolder> {
 
     private Context context;
@@ -72,6 +73,7 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerVi
             holder.constraintLayout.setBackgroundColor(0);
         }
 
+        //Select or deselect given item on click.
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,6 +119,7 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerVi
         }
     }
 
+    //Returns selected item list
     public List<MedicineSelecter> getSelectedItemList() {
         List<MedicineSelecter> selectedList = new ArrayList<>(medicineSelecterList);
 
@@ -130,6 +133,7 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerVi
         return selectedList;
     }
 
+    //Returns selected item count
     public int getSelectedCount() {
         List<MedicineSelecter> selectedList = new ArrayList<>(medicineSelecterList);
 

@@ -1,5 +1,8 @@
 package com.example.mark_xix.models;
 
+/**
+ * Slot Declaration.
+ */
 public enum EnumSlot {
     SLOT_1,
     SLOT_2,

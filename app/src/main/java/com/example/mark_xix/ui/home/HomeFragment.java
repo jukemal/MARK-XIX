@@ -65,6 +65,9 @@ import retrofit2.Response;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
+/*
+Home
+ */
 public class HomeFragment extends Fragment {
 
     private static final String TAG = "Home";
@@ -94,8 +97,9 @@ public class HomeFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
-//        offlineRun();
-
+        /**
+         * Fetching medicine list from firebase and showing it in a recyclerview.
+         */
         collectionReferenceMedicine
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -119,6 +123,9 @@ public class HomeFragment extends Fragment {
                             }
 
                             if (task.isComplete()) {
+                                /*
+                                 * Sorting the list according to the slot.
+                                 */
                                 Collections.sort(medicineSelecterList, new Comparator<MedicineSelecter>() {
                                     @Override
                                     public int compare(MedicineSelecter o1, MedicineSelecter o2) {
@@ -136,12 +143,22 @@ public class HomeFragment extends Fragment {
                     }
                 });
 
+        /**
+         * Order button
+         *
+         * When clicked, sending a POST request to the server with selected items to the endpoint "/medicines".
+         * Then every two second check the progress with a GET request to the server.
+         */
         Button buttonOrder = root.findViewById(R.id.btnOrder_home);
 
         buttonOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                /**
+                 * In recyclerview  items are stored as MedicineSelecter class. But for the request Medicine class needed.
+                 * This function transforms MedicineSelecter class to Medicine class.
+                 */
                 if (homeRecyclerViewAdapter.getSelectedCount() > 0) {
                     List<MedicineSelecter> selectedList = homeRecyclerViewAdapter.getSelectedItemList();
 
@@ -152,10 +169,15 @@ public class HomeFragment extends Fragment {
                         }
                     });
 
+                    //------------------------------------------------------------------------------------------
+                    //Selected Medicine Dialog
+
+                    //View for selected medicine dialog
                     View viewPopup = inflater.inflate(R.layout.layout_order_popup, null);
 
                     LinearLayout linearLayout = viewPopup.findViewById(R.id.linear_layout);
 
+                    //Populating linearLayout with selected medicines.
                     for (Medicine medicine : selectedMedicineList) {
                         View viewPopupItem = inflater.inflate(R.layout.layout_order_popup_item, null);
 
@@ -177,23 +199,27 @@ public class HomeFragment extends Fragment {
                         linearLayout.addView(viewPopupItem);
                     }
 
+                    //Showing alert dialog.
                     MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(getContext());
                     materialAlertDialogBuilder.setView(viewPopup);
                     final AlertDialog alertDialog = materialAlertDialogBuilder.show();
 
                     Button buttonConfirm = viewPopup.findViewById(R.id.btnConfirm);
 
+                    //Confirm button
                     buttonConfirm.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
 
                             buttonConfirm.setEnabled(false);
 
+                            //When confirm button is clicked dismissing alert dialog and showing progress dialog.
                             AlertDialog progressDialog = showProgressDialog();
                             alertDialog.dismiss();
 
                             ApiService service = ApiServiceGenerator.createService(ApiService.class);
 
+                            //POST request to "/medicines" with selected medicines.
                             Call<Object> call = service.sendMedicineList(selectedMedicineList);
 
                             call.enqueue(new Callback<Object>() {
@@ -203,8 +229,13 @@ public class HomeFragment extends Fragment {
 
                                     Gson gson = new Gson();
 
+                                    /*
+                                     * If request is successful show progress dialog until the task is finished.
+                                     * Else show an error.
+                                     */
                                     if (response.isSuccessful()) {
 
+                                        //Calculating total price for the given order.
                                         int total=0;
 
                                         for (Medicine medicine:selectedMedicineList){
@@ -216,6 +247,7 @@ public class HomeFragment extends Fragment {
                                                 .total(total)
                                                 .build();
 
+                                        //Adding order to the firebase.
                                         collectionReferenceOrderHistory
                                                 .add(orderHistory)
                                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -231,6 +263,16 @@ public class HomeFragment extends Fragment {
                                                     }
                                                 });
 
+                                        /*
+                                        Function for checking progress for the order.
+
+                                        This runs every two seconds.
+
+                                        Calls the endpoint "/progress".
+
+                                        It response is "processing" keep showing progress dialog.
+                                        It response is "done" dismiss progress dialog.
+                                         */
                                         disposable = Observable.interval(2, TimeUnit.SECONDS)
                                                 .take(20)
                                                 .observeOn(AndroidSchedulers.mainThread())
@@ -262,6 +304,7 @@ public class HomeFragment extends Fragment {
                                                             public void onFailure(Call<Object> call, Throwable t) {
                                                                 Toast.makeText(getContext(), "Error Connecting to Server.", Toast.LENGTH_SHORT).show();
                                                                 disposable.dispose();
+                                                                progressDialog.dismiss();
                                                             }
                                                         });
                                                     }
@@ -286,6 +329,7 @@ public class HomeFragment extends Fragment {
                         }
                     });
 
+                    //Cancle button
                     Button buttonCancel = viewPopup.findViewById(R.id.btnCancel);
 
                     buttonCancel.setOnClickListener(new View.OnClickListener() {
@@ -295,6 +339,7 @@ public class HomeFragment extends Fragment {
                         }
                     });
 
+                    //Close Button
                     ImageButton imageButtonClose = viewPopup.findViewById(R.id.close);
 
                     imageButtonClose.setOnClickListener(new View.OnClickListener() {
@@ -303,6 +348,9 @@ public class HomeFragment extends Fragment {
                             alertDialog.dismiss();
                         }
                     });
+                    // End Selected Medicine Dialog
+                    //------------------------------------------------------------------------------------------
+
                 }
             }
         });
@@ -311,6 +359,7 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
+    //Progress Dialog
     private AlertDialog showProgressDialog() {
         View viewPopup = LayoutInflater.from(getContext()).inflate(R.layout.layout_progress_popup, null);
 
@@ -328,46 +377,5 @@ public class HomeFragment extends Fragment {
         });
 
         return alertDialog;
-    }
-
-    private void offlineRun() {
-
-        List<MedicineSelecter> medicineSelecterList = new ArrayList<>();
-
-        final List<String> picture_list = new ArrayList<>();
-        picture_list.add("gs://mark-xix.appspot.com/medicine_1.jpg");
-        picture_list.add("gs://mark-xix.appspot.com/medicine_2.jpg");
-        picture_list.add("gs://mark-xix.appspot.com/medicine_3.jpg");
-        picture_list.add("gs://mark-xix.appspot.com/medicine_4.jpg");
-        picture_list.add("gs://mark-xix.appspot.com/medicine_5.jpg");
-
-        final Faker faker = new Faker();
-        final Random random = new Random();
-        Calendar calendar = Calendar.getInstance();
-
-        for (EnumSlot slot : EnumSlot.values()) {
-
-            Medicine medicine = Medicine.builder()
-                    .id(String.valueOf(random.nextInt(100000 + 1) + 10000))
-                    .name(faker.lorem().word())
-                    .price(random.nextInt(900 + 1) + 100)
-                    .description(faker.lorem().paragraph(1))
-                    .slot(slot)
-                    .image_link(picture_list.get(random.nextInt(5)))
-                    .timestamp(calendar.getTime())
-                    .build();
-
-            MedicineSelecter medicineSelecter = MedicineSelecter.builder()
-                    .id(medicine.getId())
-                    .medicine(medicine)
-                    .isSelected(false)
-                    .build();
-
-            medicineSelecterList.add(medicineSelecter);
-        }
-
-        homeRecyclerViewAdapter = new HomeRecyclerViewAdapter(getContext(), medicineSelecterList);
-        progressBar.setVisibility(View.GONE);
-        recyclerView.setAdapter(homeRecyclerViewAdapter);
     }
 }

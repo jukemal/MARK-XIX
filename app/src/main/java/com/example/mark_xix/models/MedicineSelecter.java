@@ -2,6 +2,10 @@ package com.example.mark_xix.models;
 
 import lombok.Builder;
 
+
+/**
+ * Data class for medicine selector.
+ */
 @Builder
 public class MedicineSelecter {
     private String id;

@@ -2,22 +2,17 @@ package com.example.mark_xix.ui;
 
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.PreferenceManager;
 import androidx.preference.PreferenceScreen;
-import androidx.preference.SwitchPreferenceCompat;
 
 import com.example.mark_xix.api.ApiServiceGenerator;
 
+//Settings
 public class SettingsFragment extends PreferenceFragmentCompat {
 
     @Override

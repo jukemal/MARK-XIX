@@ -9,6 +9,9 @@ import java.util.List;
 
 import lombok.Builder;
 
+/**
+ * Data class for order history.
+ */
 @Builder
 public class OrderHistory implements Serializable {
     private @DocumentId String id;
