@@ -57,6 +57,8 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecycler
 
         holder.textViewTotal.setText(String.valueOf(orderHistory.getTotal()));
 
+        holder.linearLayout.removeAllViews();
+
         for (Medicine medicine:orderHistory.getMedicineList()){
             View viewPopupItem = LayoutInflater.from(context).inflate(R.layout.layout_order_popup_item, null);
 

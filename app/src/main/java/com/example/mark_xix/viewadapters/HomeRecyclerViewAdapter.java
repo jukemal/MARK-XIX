@@ -32,7 +32,6 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerVi
 
     private Context context;
     private List<MedicineSelecter> medicineSelecterList;
-    private List<MedicineSelecter> selectedList;
 
     private final FirebaseStorage storage = FirebaseStorage.getInstance();
 

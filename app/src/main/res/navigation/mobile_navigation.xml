@@ -5,6 +5,14 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/navigation_home">
 
+    <action
+        android:id="@+id/action_to_navigation_add_medicine_edit"
+        app:destination="@id/navigation_add_medicine_edit"
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right"/>
+
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.example.mark_xix.ui.home.HomeFragment"
@@ -27,4 +35,12 @@
         android:id="@+id/navigation_settings"
         android:name="com.example.mark_xix.ui.SettingsFragment"
         android:label="Settings" />
+    <fragment
+        android:id="@+id/navigation_add_medicine"
+        android:name="com.example.mark_xix.ui.AddMedicineFragment"
+        android:label="Add / Update Medicine" />
+    <fragment
+        android:id="@+id/navigation_add_medicine_edit"
+        android:name="com.example.mark_xix.ui.AddMedicineEditFragment"
+        android:label="Edit" />
 </navigation>

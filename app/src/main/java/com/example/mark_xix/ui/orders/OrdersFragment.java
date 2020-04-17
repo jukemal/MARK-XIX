@@ -35,7 +35,7 @@ import java.util.List;
 
 public class OrdersFragment extends Fragment {
 
-    private static final String TAG = "Home";
+    private static final String TAG = "Orders";
 
     private final FirebaseStorage storage = FirebaseStorage.getInstance();
 

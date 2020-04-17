@@ -48,6 +48,8 @@ import org.apache.commons.collections4.Transformer;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -117,6 +119,13 @@ public class HomeFragment extends Fragment {
                             }
 
                             if (task.isComplete()) {
+                                Collections.sort(medicineSelecterList, new Comparator<MedicineSelecter>() {
+                                    @Override
+                                    public int compare(MedicineSelecter o1, MedicineSelecter o2) {
+                                        return o1.getMedicine().getSlot().compareTo(o2.getMedicine().getSlot());
+                                    }
+                                });
+
                                 homeRecyclerViewAdapter = new HomeRecyclerViewAdapter(getContext(), medicineSelecterList);
                                 progressBar.setVisibility(View.GONE);
                                 recyclerView.setAdapter(homeRecyclerViewAdapter);

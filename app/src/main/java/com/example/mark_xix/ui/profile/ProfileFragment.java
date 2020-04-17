@@ -17,36 +17,14 @@ import androidx.navigation.Navigation;
 
 import com.example.mark_xix.R;
 import com.example.mark_xix.SplashScreen;
-import com.example.mark_xix.api.ApiService;
-import com.example.mark_xix.api.ApiServiceGenerator;
-import com.example.mark_xix.models.EnumSlot;
-import com.example.mark_xix.models.Medicine;
 import com.example.mark_xix.models.User;
-import com.example.mark_xix.utils._ResponseBody;
-import com.github.javafaker.Faker;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.gson.Gson;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Random;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 
 public class ProfileFragment extends Fragment {
 
@@ -94,7 +72,7 @@ public class ProfileFragment extends Fragment {
         btnEditMedicine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Navigation.findNavController(container).navigate(R.id.navigation_add_medicine);
             }
         });
 
