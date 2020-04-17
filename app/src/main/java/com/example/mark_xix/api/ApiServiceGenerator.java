@@ -1,18 +1,14 @@
 package com.example.mark_xix.api;
 
-import android.content.SharedPreferences;
-
-import androidx.preference.PreferenceManager;
-
-import com.example.mark_xix.utils.GlobalAppContextSingleton;
-
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
+/**
+ * Service Generator for Retrofit.
+ */
 public class ApiServiceGenerator {
 
     private static Retrofit.Builder builder;

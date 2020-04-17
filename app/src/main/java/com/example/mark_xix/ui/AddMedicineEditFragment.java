@@ -58,6 +58,9 @@ import lombok.SneakyThrows;
 import static android.app.Activity.RESULT_OK;
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
+/*
+Add / Edit Medicine
+ */
 public class AddMedicineEditFragment extends Fragment {
 
     private static final int REQUEST_CODE_CHOOSE = 102;
@@ -79,9 +82,11 @@ public class AddMedicineEditFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_add_medicine_edit, container, false);
 
+        //Selected medicine id
         final String id = getArguments().getString("id");
         Log.e("ID", id);
 
+        //Medicine list
         final List<Medicine> med = (List<Medicine>) getArguments().getSerializable("medicineList");
 
         ProgressBar progressBar = root.findViewById(R.id.progress_bar);
@@ -114,22 +119,31 @@ public class AddMedicineEditFragment extends Fragment {
 
         List<String> alreadyOccupiedSlotList = new ArrayList<>();
 
+        //Currently occupied slots
         for (Medicine medicine : med) {
             alreadyOccupiedSlotList.add(medicine.getSlot().toString());
         }
 
         List<String> slotList = new ArrayList<>();
 
+        //Empty slots
         for (EnumSlot slot : EnumSlot.values()) {
             if (!alreadyOccupiedSlotList.contains(slot.toString())) {
                 slotList.add(slot.toString());
             }
         }
 
+        /*
+        If id is empty it means new medicine is been added.
+        Else updating or deleting existing medicines.
+         */
         if (id.isEmpty()) {
+            //Add medicine
 
+            //Setting spinner to slot list
             spinner.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, slotList));
 
+            //Add button
             buttonAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -139,6 +153,7 @@ public class AddMedicineEditFragment extends Fragment {
                     String price = textInputEditTextPrice.getText().toString();
                     String description = textInputEditTextDescription.getText().toString();
 
+                    //Input validation
                     if (name.isEmpty() || price.isEmpty() || description.isEmpty() || photoUri == null) {
                         if (name.isEmpty()) {
                             textInputLayoutName.setError("Enter Name");
@@ -170,6 +185,7 @@ public class AddMedicineEditFragment extends Fragment {
 
                         StorageReference reference = storageRef.child("/" + photoUri.getLastPathSegment());
 
+                        //Uploading image to the firebase storage.
                         reference
                                 .putFile(photoUri)
                                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -182,7 +198,7 @@ public class AddMedicineEditFragment extends Fragment {
                                         map.put("slot", spinner.getSelectedItem().toString());
                                         map.put("image_link", path);
 
-
+                                        //Adding medicine to the firebase.
                                         collectionReferenceMedicine
                                                 .add(map)
                                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -219,8 +235,11 @@ public class AddMedicineEditFragment extends Fragment {
             progressBar.setVisibility(View.GONE);
             linearLayoutAdd.setVisibility(View.VISIBLE);
         } else {
+            //Update / Edit Medicine
+
             cardView.setVisibility(View.GONE);
 
+            //Fetching selected medicine data from firebase
             collectionReferenceMedicine
                     .document(id)
                     .get()
@@ -232,6 +251,8 @@ public class AddMedicineEditFragment extends Fragment {
                                 DocumentSnapshot document = task.getResult();
                                 if (document.exists()) {
                                     Medicine medicine = document.toObject(Medicine.class);
+
+                                    //Setting fields
 
                                     textInputEditTextName.setText(medicine.getName());
                                     textInputEditTextPrice.setText(String.valueOf(medicine.getPrice()));
@@ -259,6 +280,7 @@ public class AddMedicineEditFragment extends Fragment {
 
                                     spinner.setSelection(i);
 
+                                    //Update button
                                     buttonUpdate.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
@@ -268,6 +290,7 @@ public class AddMedicineEditFragment extends Fragment {
                                             String price = textInputEditTextPrice.getText().toString();
                                             String description = textInputEditTextDescription.getText().toString();
 
+                                            //Input validation
                                             if (name.isEmpty() || price.isEmpty() || description.isEmpty()) {
                                                 if (name.isEmpty()) {
                                                     textInputLayoutName.setError("Enter Name");
@@ -285,7 +308,11 @@ public class AddMedicineEditFragment extends Fragment {
                                                     textInputLayoutDescription.setError(null);
                                                 }
                                             } else {
+                                                /*
+                                                Checking whether a new image has been selected or not.
+                                                 */
                                                 if (photoUri == null) {
+                                                    //If new image has not been selected
 
                                                     Map<String, Object> map = new HashMap<>();
                                                     map.put("name", name);
@@ -314,12 +341,15 @@ public class AddMedicineEditFragment extends Fragment {
                                                                 }
                                                             });
                                                 } else {
+                                                    //If new image has been selected
+
                                                     progressBarAdd.setVisibility(View.VISIBLE);
 
                                                     String path = "gs://mark-xix.appspot.com/" + photoUri.getLastPathSegment();
 
                                                     StorageReference reference = storageRef.child("/" + photoUri.getLastPathSegment());
 
+                                                    //Uploading photo to the firebase.
                                                     reference
                                                             .putFile(photoUri)
                                                             .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -332,7 +362,7 @@ public class AddMedicineEditFragment extends Fragment {
                                                                     map.put("slot", spinner.getSelectedItem().toString());
                                                                     map.put("image_link", path);
 
-
+                                                                    //Update medicine data.
                                                                     collectionReferenceMedicine
                                                                             .document(medicine.getId())
                                                                             .update((Map<String, Object>) map)
@@ -369,6 +399,7 @@ public class AddMedicineEditFragment extends Fragment {
                                     });
 
 
+                                    //Delete button.
                                     buttonDelete.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
@@ -380,6 +411,8 @@ public class AddMedicineEditFragment extends Fragment {
                                                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                                         @Override
                                                         public void onClick(DialogInterface dialog, int which) {
+
+                                                            //Delete medicine from the firestore.
                                                             collectionReferenceMedicine
                                                                     .document(medicine.getId())
                                                                     .delete()
@@ -424,6 +457,8 @@ public class AddMedicineEditFragment extends Fragment {
                     });
         }
 
+        //Choose picture button.
+        //Uses Matisse library to choose a picture from the gallery or take a new picture.
         buttonChoosePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -442,6 +477,7 @@ public class AddMedicineEditFragment extends Fragment {
         return root;
     }
 
+    //Chosen photo details arrives here.
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -452,6 +488,7 @@ public class AddMedicineEditFragment extends Fragment {
 
             photoUri = Matisse.obtainResult(data).get(0);
 
+            //Setting imageview
             imageViewImage.setImageURI(Matisse.obtainResult(data).get(0));
         }
     }

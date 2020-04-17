@@ -26,6 +26,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/*
+Profile
+ */
 public class ProfileFragment extends Fragment {
 
     private static final String TAG = "Profile";
@@ -43,6 +46,9 @@ public class ProfileFragment extends Fragment {
         TextView name=root.findViewById(R.id.name_profile);
         TextView email=root.findViewById(R.id.email_profile);
 
+        /*
+        Fetching user data from firebase.
+         */
         documentReferenceUser.get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -67,6 +73,7 @@ public class ProfileFragment extends Fragment {
                     }
                 });
 
+        //Add / Edit Medicine
         Button btnEditMedicine=root.findViewById(R.id.btnEditMedicine);
 
         btnEditMedicine.setOnClickListener(new View.OnClickListener() {
@@ -76,6 +83,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        //Settings
         Button buttonSettings=root.findViewById(R.id.btnSettings);
 
         buttonSettings.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +93,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        //Logout
         Button buttonLogout=root.findViewById(R.id.btnLogOut);
 
         buttonLogout.setOnClickListener(new View.OnClickListener() {

@@ -18,12 +18,12 @@ import com.example.mark_xix.models.OrderHistory;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
+//Order history recyclerview adapter
 public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecyclerViewAdapter.OrderRecyclerViewHolder> {
 
     private Context context;

@@ -23,6 +23,7 @@ import java.util.List;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
+//Add medicine recyclerview adapter.
 public class AddMedicineRecyclerViewAdapter extends RecyclerView.Adapter<AddMedicineRecyclerViewAdapter.AddMedicineRecyclerViewHolder> {
 
     private Context context;

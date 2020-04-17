@@ -8,6 +8,9 @@ import java.util.Date;
 
 import lombok.Builder;
 
+/**
+ * Data class for user.
+ */
 @Builder
 public class User implements Serializable {
 

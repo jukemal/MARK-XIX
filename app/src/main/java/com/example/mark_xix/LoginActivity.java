@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+//Login
 public class LoginActivity extends AppCompatActivity {
 
     private final FirebaseFirestore db= FirebaseFirestore.getInstance();
@@ -43,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
                 String email=textInputEditTextEmail.getText().toString();
                 String password=textInputEditTextPassword.getText().toString();
 
+                //Input Validation
                 if (email.isEmpty() || password.isEmpty()) {
                     if (email.isEmpty()) {
                         textInputLayoutEmail.setError("Please Enter Your Email.");

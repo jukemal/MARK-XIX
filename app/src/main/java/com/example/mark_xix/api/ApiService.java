@@ -9,6 +9,9 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 
+/**
+ * Endpoints for NodeMCU Server.
+ */
 public interface ApiService {
     @POST("medicines")
     public Call<Object> sendMedicineList(@Body List<Medicine> medicineList);

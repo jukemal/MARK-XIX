@@ -33,6 +33,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+Order History
+ */
 public class OrdersFragment extends Fragment {
 
     private static final String TAG = "Orders";
@@ -56,6 +59,9 @@ public class OrdersFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
+        /*
+        Feting order history from the firebase and showing them in a recyclerview.
+         */
         collectionReferenceOrderHistory
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
