@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:scrollbars="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="REGISTER"
+            android:textAlignment="center"
+            android:textColor="#FFFDFD"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"/>
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:scaleType="fitCenter"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/robo_2"
+            android:layout_gravity="center_horizontal"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtEmailLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:hint="Email"
+            app:hintTextColor="#000000"
+            app:boxBackgroundColor="#B7949292"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            app:counterEnabled="true"
+            app:counterMaxLength="50">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtNameLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:hint="Name"
+            app:hintTextColor="#000000"
+            app:boxBackgroundColor="#B7949292"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            app:counterEnabled="true"
+            app:counterMaxLength="50">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtNumberLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:hint="Telephone Number"
+            app:hintTextColor="#000000"
+            app:boxBackgroundColor="#B7949292"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            app:counterEnabled="true"
+            app:counterMaxLength="50">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtPasswordLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Password"
+            app:hintTextColor="#000000"
+            app:boxBackgroundColor="#B7949292"
+            app:endIconMode="password_toggle"
+            app:errorEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                app:counterEnabled="true"
+                app:counterMaxLength="50"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Register"
+            android:textColor="#ffffff"
+            app:backgroundTint="@color/colorPrimaryDark"
+            app:cornerRadius="10dp"/>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

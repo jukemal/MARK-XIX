@@ -1,0 +1,39 @@
+{
+  "args": {
+    
+  },
+  "data": [
+    {
+      "description": "Molestiae delectus aut ea reiciendis omnis possimus officia. Ut dicta cum qui repudiandae tempore quo.",
+      "image_link": "gs://mark-xix.appspot.com/medicine_2.jpg",
+      "name": "explicabo",
+      "price": 907,
+      "slot": "SLOT_1"
+    }
+  ],
+  "files": {
+    
+  },
+  "form": {
+    
+  },
+  "headers": {
+    "x-forwarded-proto": "https",
+    "host": "postman-echo.com",
+    "content-length": "225",
+    "accept-encoding": "gzip",
+    "content-type": "application/json; charset=UTF-8",
+    "user-agent": "okhttp/4.5.0",
+    "x-forwarded-port": "443"
+  },
+  "json": [
+    {
+      "description": "Molestiae delectus aut ea reiciendis omnis possimus officia. Ut dicta cum qui repudiandae tempore quo.",
+      "image_link": "gs://mark-xix.appspot.com/medicine_2.jpg",
+      "name": "explicabo",
+      "price": 907,
+      "slot": "SLOT_1"
+    }
+  ],
+  "url": "https://postman-echo.com/post"
+}
